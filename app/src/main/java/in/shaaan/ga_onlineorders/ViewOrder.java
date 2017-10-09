@@ -3,6 +3,7 @@ package in.shaaan.ga_onlineorders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class ViewOrder extends AppCompatActivity {
                 FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                 DatabaseReference databaseReference = GaFirebase.isCalled().getReference(orderURL);
                 databaseReference.removeValue();
+                Log.d("Removed,", orderURL);
                 finish();
             }
         });

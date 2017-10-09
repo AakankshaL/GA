@@ -1,24 +1,31 @@
 package in.shaaan.ga_onlineorders;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -26,44 +33,44 @@ import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import in.shaaan.ga_onlineorders.pojo.OrderData;
 
 
 public class BuildOrder extends AppCompatActivity {
 
     private static final String TAG = "BuildOrder";
     private static final String REQUIRED = "This is required";
-    @Bind(R.id.expProdList)
-    TextView textView;
-    @Bind(R.id.prodList)
-    TextView prodList;
     @Bind(R.id.submit)
-    Button submit;
+    FloatingActionButton submit;
+    @Bind(R.id.scheme_checkbox)
+    CheckBox checkBox;
     @Bind(R.id.custName)
     AutoCompleteTextView completeTextView;
     @Bind(R.id.autocompleteview)
     AutoCompleteTextView autoCompleteTextView;
-    @Bind(R.id.autocompleteviewExp)
-    AutoCompleteTextView autoCompleteTextView1;
     @Bind(R.id.quantity)
     EditText editText;
-    @Bind(R.id.quantityExp)
-    EditText editText1;
+    @Bind(R.id.orderList)
+    RecyclerView recyclerView;
+    @Bind(R.id.addProduct)
+    Button addProduct;
+    /*@Bind(R.id.prod_del)
+    Button productDelete;*/
+    private DatabaseReference mDatabaseReference;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseAuth firebaseAuth;
+    private String k;
+    private LinearLayoutManager linearLayoutManager;
+    private List<OrderData> orderData = new ArrayList<>();
+    private RecyclerAdapterFile mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_order);
         ButterKnife.bind(this);
-
-/*
-                int[] custCode = getResources().getIntArray(R.array.custCode);
-                String[] custName = getResources().getStringArray(R.array.custName);
-                List<Integer> cCode = new ArrayList<Integer>();
-                List<String> cName = new ArrayList<String>(Arrays.asList(custName));
-                HashMap<Integer, String> hashMap = new HashMap<>();
-                for (int i = 0; i < custCode.length; i++) {
-                    hashMap.put(custCode[i], custName[i]);
-                }*/
+        final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar3);
+        setSupportActionBar(toolbar);
 
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
         String[] drugArr = getResources().getStringArray(R.array.drugList);
@@ -76,11 +83,13 @@ public class BuildOrder extends AppCompatActivity {
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, layoutItemId, custList);
 
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView1.setAdapter(adapter);
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        mAdapter = new RecyclerAdapterFile(orderData);
+        recyclerView.setAdapter(mAdapter);
 
         completeTextView.setAdapter(adapter1);
         GaFirebase.isCalled();
-
         String s = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String bh = custList.toString();
         String s1 = salesmen.toString();
@@ -98,6 +107,16 @@ public class BuildOrder extends AppCompatActivity {
             completeTextView.setText("Not a valid user");
             completeTextView.setEnabled(false);
         }
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                Log.d("Signed in?", "We logged in" + user.getEmail());
+            }
+        };
+
     }
 
     public void addProduct(View view) {
@@ -107,43 +126,37 @@ public class BuildOrder extends AppCompatActivity {
             Snackbar.make(view, "You did not enter the product", Snackbar.LENGTH_LONG).show();
         } else if (quantity.matches("")) {
             Snackbar.make(view, "You did not add the quantity", Snackbar.LENGTH_LONG).show();
-        } else
-            prodList.append("" + drug + "     " + quantity + "\n");
+        } else {
+//            prodList.append("" + drug + "     " + quantity + "\n");
+
+            getDataA();
+        }
         autoCompleteTextView.getText().clear();
         editText.getText().clear();
         autoCompleteTextView.requestFocus();
     }
 
-    public void addExpiry(View view) {
-        String quantity = editText1.getText().toString();
-        String drugExp = autoCompleteTextView1.getText().toString();
-        if (drugExp.matches("")) {
-            Snackbar.make(view, "You did not enter the product", Snackbar.LENGTH_LONG).show();
-        } else if (quantity.matches("")) {
-            Snackbar.make(view, "You did not add the quantity", Snackbar.LENGTH_LONG).show();
-        } else
-            textView.append(drugExp + "     " + quantity + "\n");
-        autoCompleteTextView1.getText().clear();
-        editText1.getText().clear();
-        autoCompleteTextView1.requestFocus();
+    public OrderData getDataA() {
+        OrderData instance = new OrderData();
+        instance.setProduct(autoCompleteTextView.getText().toString());
+        instance.setQuantity(editText.getText().toString());
+        Log.d("I am doing something", "seriously?");
+        if (checkBox.isChecked()) {
+            instance.setScheme("With scheme");
+        }
+        return instance;
     }
 
-    public void sendOrder(View view) {
-        submitOrder();
-    }
+//    public void sendOrder(View view) {
+//        submitOrder();
+//    }
 
     private void submitOrder() {
         final String customer = completeTextView.getText().toString();
-        final String expProduct = textView.getText().toString();
-        final String product = prodList.getText().toString();
 
         if (TextUtils.isEmpty(customer)) {
             completeTextView.setError(REQUIRED);
             return;
-        }
-
-        if (TextUtils.isEmpty(product)) {
-            prodList.setError(REQUIRED);
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -165,9 +178,9 @@ public class BuildOrder extends AppCompatActivity {
                 reference.keepSynced(true);
                 String key = reference.child("salesman").child(userId).child("orders").push().getKey();
                 reference.child(key).child("custName").setValue(customer);
-                reference.child(key).child("products").setValue(product);
+//                reference.child(key).child("products").setValue(product);
                 reference.child(key).child("email").setValue(eMail);
-                reference.child(key).child("expProducts").setValue(expProduct);
+//                reference.child(key).child("expProducts").setValue(expProduct);
                 reference.child(key).child("date").setValue(date);
             }
         });
@@ -183,8 +196,8 @@ public class BuildOrder extends AppCompatActivity {
                 reference.child(key).child("email").setValue(eMail);
                 reference.child(key).child("date").setValue(date);
                 reference.child(key).child("custName").setValue(customer);
-                reference.child(key).child("products").setValue(product);
-                reference.child(key).child("expProducts").setValue(expProduct);
+//                reference.child(key).child("products").setValue(product);
+//                reference.child(key).child("expProducts").setValue(expProduct);
             }
         });
         t.start();
@@ -200,7 +213,7 @@ public class BuildOrder extends AppCompatActivity {
 
     private void setEditing(boolean enabled) {
         completeTextView.setEnabled(enabled);
-        prodList.setEnabled(enabled);
+//        prodList.setEnabled(enabled);
         if (enabled) {
             submit.setVisibility(View.VISIBLE);
         } else {

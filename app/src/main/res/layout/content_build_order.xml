@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/custNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/cust_name"
+            android:textColor="@color/tw__composer_black"
+            android:textSize="13sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/custName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custNameView"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:completionThreshold="1"
+            android:padding="@dimen/frag_pad"
+            android:textColor="@color/tw__composer_black"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/prodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custName"
+            android:layout_margin="15dp"
+            android:text="@string/prod_name"
+            android:textColor="@color/tw__composer_black"
+            android:textSize="13sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autocompleteview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/prodName"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:completionThreshold="1"
+            android:inputType="textNoSuggestions|textFilter"
+            android:maxLines="1"
+            android:padding="@dimen/frag_pad"
+            android:textColor="@color/tw__composer_black"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/autocompleteview"
+            android:layout_margin="15dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/quantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:hint="@string/quantity"
+                android:inputType="numberDecimal"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/addProduct"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:onClick="addProduct"
+                android:text="@string/add" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/scheme_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:padding="@dimen/frag_pad"
+            android:text="@string/scheme"
+            android:textSize="13sp" />
+
+        <View
+            android:id="@+id/view"
+            style="@style/Divider"
+            android:layout_below="@id/scheme_checkbox" />
+
+        <TextView
+            android:id="@+id/prodNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view"
+            android:layout_marginTop="@dimen/frag_pad"
+            android:padding="@dimen/frag_pad"
+            android:text="@string/prod_name"
+            android:textColor="@color/tw__composer_black"
+            android:textSize="13sp" />
+
+        <ScrollView
+            android:id="@+id/orderListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/prodNameView"
+            android:padding="@dimen/frag_pad">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/orderList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/item_order1" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

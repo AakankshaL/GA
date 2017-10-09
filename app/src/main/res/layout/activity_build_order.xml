@@ -1,150 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="in.shaaan.ga_onlineorders.BuildOrder">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:padding="@dimen/frag_pad">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/custNameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="@string/cust_name"
-            android:textColor="@color/tw__composer_black"
-            android:textSize="13sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/custName"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/custNameView"
-            android:completionThreshold="1"
-            android:textColor="@color/tw__composer_black"
-            android:textSize="13sp" />
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:elevation="4dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
 
         <View
-            style="@style/Divider"
-            android:layout_below="@id/custName" />
-
-        <TextView
-            android:id="@+id/prodNameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/custName"
-            android:layout_marginTop="@dimen/frag_pad"
-            android:text="@string/prod_name"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/prodList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/prodNameView"
-            android:padding="@dimen/frag_pad"
-            android:textSize="20sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autocompleteview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/prodList"
-            android:completionThreshold="1"
-            android:hint="@string/productname"
-            android:inputType="textNoSuggestions|textFilter"
-            android:maxLines="1" />
-
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/autocompleteview"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/quantity"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:hint="@string/quantity"
-                android:inputType="numberDecimal" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:onClick="addProduct"
-                android:text="@string/add" />
-        </LinearLayout>
-
-        <!--<TextView
-            android:id="@+id/expProdNameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linear"
-            android:layout_marginTop="15dp"
-            android:text="@string/pae"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/expProdList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/expProdNameView"
-            android:padding="@dimen/frag_pad"
-            android:textSize="20sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autocompleteviewExp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/expProdList"
-            android:hint="@string/productname"
-            android:inputType="textNoSuggestions|textFilter"
-            android:maxLines="1" />
-
-        <LinearLayout
-            android:id="@+id/linearExp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/autocompleteviewExp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/quantityExp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:hint="@string/quantity"
-                android:inputType="numberDecimal" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:onClick="addExpiry"
-                android:text="@string/add" />
-        </LinearLayout>-->
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/linear"
-            android:layout_marginTop="10dp"
-            android:onClick="sendOrder"
-            android:padding="@dimen/frag_pad"
-            android:text="@string/submit" />
+            android:layout_height="4dp"
+            android:layout_below="@id/appBar"
+            android:background="@drawable/dropshadow"
+            tools:layout_editor_absoluteY="83dp" />
     </RelativeLayout>
 
-</ScrollView>
+    <include layout="@layout/content_build_order" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/frag_pad"
+        android:onClick="sendOrder"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_send_white_24dp" />
+</android.support.design.widget.CoordinatorLayout>

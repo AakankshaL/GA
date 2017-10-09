@@ -28,7 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ViewOrder" />
-        <activity android:name=".About"></activity>
+        <activity android:name=".About" />
+
     </application>
 
 </manifest>

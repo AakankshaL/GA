@@ -14,17 +14,23 @@ public class OrderData {
     private String email;
     private String expProducts;
     private String products;
+    private String product;
+    private String scheme;
+    private String quantity;
 
     public OrderData() {
 
     }
 
-    public OrderData(String expProducts, String custName, String date, String products, String email) {
+    public OrderData(String expProducts, String quantity, String scheme, String product, String custName, String date, String products, String email) {
         this.email = email;
+        this.quantity = quantity;
         this.custName = custName;
         this.date = date;
         this.products = products;
         this.expProducts = expProducts;
+        this.product = product;
+        this.scheme = scheme;
 
     }
 
@@ -66,5 +72,29 @@ public class OrderData {
 
     public void setExpProducts(String expProducts) {
         this.expProducts = expProducts;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }
